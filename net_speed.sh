@@ -1,8 +1,10 @@
-# vi /opt/scripts/port-speed.sh
-
 #!/bin/sh
-ip a |awk '/state UP/{print $2}' | sed 's/://' | while read output;
+hostname
+echo "-------------"
+for iname in $(ip a |awk '/state UP/{print $2}')
 do
-echo $output:
-ethtool $output |grep "Speed:"
+echo "$iname"
+ip a | grep -A2 $iname | awk '/inet/{print $2}'
+ip a | grep -A2 $iname | awk '/link/{print $2}'
+ethtool $iname |grep "Speed:"
 done
